@@ -1,8 +1,9 @@
 <template>
   <from class="sign-up" @submit.prevent="checkForm">
-   <div class="container">
-     <div class="col-md-8 order-md-1">
-       <div class="row">
+   <div class="container mt-4">
+     <div class="col-sm-4 mx-auto">
+
+       <div v-show="step === 1">
 
             <div class="col-md-8 order-md-3">
               <label for="surname">Фамилия:</label>
@@ -25,109 +26,127 @@
               <input id="middleName" class="form-control" v-model.trim="form.middleName">
             </div>
 
-       </div>
 
-    <div class="form-group">
-      <label for="dateOfBirth">Дата рождения:</label>
-      <input id="dateOfBirth" class="form-control" v-model.trim="$v.form.name.$model">
-      <p class="error" v-if="!$v.form.name.required">Обязательное поле</p>
-      <p class="error" v-if="!$v.form.name.minLength">Здесь должно быть больше  {{$v.form.name.$params.minLength.min}} символов.</p>
-      <tree-view :data="$v.form.name" :options="{rootObjectKey: '$v.form.name', maxDepth: 2}"></tree-view>
 
-    <div class="form-group">
-      <label for="phoneNumber">Номер телефона:</label>
-      <input id="phoneNumber" class="form-control" v-model.trim="form.phoneNumber">
-    </div>
+            <div class="form-group">
+              <label for="dateOfBirth">Дата рождения:</label>
+              <input id="dateOfBirth" class="form-control" v-model.trim="$v.form.name.$model">
+              <p class="error" v-if="!$v.form.name.required">Обязательное поле</p>
+              <p class="error" v-if="!$v.form.name.minLength">Здесь должно быть больше  {{$v.form.name.$params.minLength.min}} символов.</p>
+              <tree-view :data="$v.form.name" :options="{rootObjectKey: '$v.form.name', maxDepth: 2}"></tree-view>
+            </div>
 
-    <div class="form-group">
-      <label for="sex">Пол:</label>
-      <input id="sex" class="form-control" v-model.trim="form.sex">
-    </div>
+            <div class="form-group">
+              <label for="phoneNumber">Номер телефона:</label>
+              <input id="phoneNumber" class="form-control" v-model.trim="form.phoneNumber">
+            </div>
 
-    <div class="form-group">
-      <label for="clientGroup">Группа клиентов:</label>
-      <select id="clientGroup" class="form-control" v-model="form.selectedClientGroups" multiple>
-        <option v-for="(clientGroup, index) in clientGroups" :key="index" :value="clientGroup.value">
-          {{ clientGroup.label }}
-        </option>
-      </select>
-    </div>
+            <div class="form-group">
+              <label for="sex">Пол:</label>
+              <input id="sex" class="form-control" v-model.trim="form.sex">
+            </div>
 
-    <div class="form-group">
-      <label for="attendingDoctor">Лечащий врач:</label>
-      <select id="attendingDoctor" class="form-control" v-model="form.attendingDoctor">
-        <option v-for="(attendingDoctor, index) in attendingDoctors" :key="index" :value="attendingDoctor.value">
-          {{ attendingDoctor.label }}
-        </option>
-      </select>
-    </div>
+            <div class="form-group">
+              <label for="clientGroup">Группа клиентов:</label>
+              <select id="clientGroup" class="form-control" v-model="form.selectedClientGroups" multiple>
+                <option v-for="(clientGroup, index) in clientGroups" :key="index" :value="clientGroup.value">
+                  {{ clientGroup.label }}
+                </option>
+              </select>
+            </div>
 
-    <div class="form-group" form-check>
-      <input type="checkbox" id="notification" class="form-check-input" for="notification" v-model="form.doNotSendSMS">
-      <label class="form-check-label" for="notification">Не отправлять СМС</label>
-    </div>
+            <div class="form-group">
+              <label for="attendingDoctor">Лечащий врач:</label>
+              <select id="attendingDoctor" class="form-control" v-model="form.attendingDoctor">
+                <option v-for="(attendingDoctor, index) in attendingDoctors" :key="index" :value="attendingDoctor.value">
+                  {{ attendingDoctor.label }}
+                </option>
+              </select>
+            </div>
 
-    <div class="form-group">
-      <label for="index">Индекс:</label>
-      <input id="index" class="form-control" v-model.trim="form.index">
-    </div>
+            <div class="form-group" form-check>
+              <input type="checkbox" id="notification" class="form-check-input" for="notification" v-model="form.doNotSendSMS">
+              <label class="form-check-label" for="notification">Не отправлять СМС</label>
+            </div>
 
-    <div class="form-group">
-      <label for="country">Страна:</label>
-      <input id="country" class="form-control" v-model.trim="form.country">
-    </div>
-
-    <div class="form-group">
-      <label for="region">Область:</label>
-      <input id="region" class="form-control" v-model.trim="form.region">
-    </div>
-
-    <div class="form-group">
-      <label for="city">Город:</label>
-      <input id="city" class="form-control" v-model.trim="form.city">
-    </div>
-
-    <div class="form-group">
-      <label for="street">Улица:</label>
-      <input id="street" class="form-control" v-model.trim="form.street">
-    </div>
-
-    <div class="form-group">
-      <label for="home">Дом:</label>
-      <input id="home" class="form-control" v-model.trim="form.home">
-    </div>
-
-    <div class="form-group">
-      <label for="documentType">Тип документа:</label>
-      <select id="documentType" class="form-control" v-model="form.documentType">
-        <option v-for="(documentType, index) in documentTypes" :key="index" :value="documentType.value">
-          {{ documentType.label }}
-        </option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label for="series">Серия:</label>
-      <input id="series" class="form-control" v-model.trim="form.series">
-    </div>
-
-    <div class="form-group">
-      <label for="number">Номер:</label>
-      <input id="number" class="form-control" v-model.trim="form.number">
-    </div>
-
-    <div class="form-group">
-      <label for="issuedBy">Кем выдан:</label>
-      <input id="issuedBy" class="form-control" v-model.trim="form.issuedBy">
-    </div>
-
-    <div class="form-group">
-      <label for="dateOfIssue">Дата выдачи:</label>
-      <input id="dateOfIssue" class="form-control" v-model.trim="form.dateOfIssue">
-    </div>
+         <button @click="step++" :disabled="disabledBtn1"
+                 type="button" class="btn btn-primary">Следующий шаг</button>
 
     </div>
-     <button class="btn btn-primary btn-lg btn-block" type="submit">Сохранить</button>
+
+    <div v-show="step === 2">
+
+            <div class="form-group">
+              <label for="index">Индекс:</label>
+              <input id="index" class="form-control" v-model.trim="form.index">
+            </div>
+
+            <div class="form-group">
+              <label for="country">Страна:</label>
+              <input id="country" class="form-control" v-model.trim="form.country">
+            </div>
+
+            <div class="form-group">
+              <label for="region">Область:</label>
+              <input id="region" class="form-control" v-model.trim="form.region">
+            </div>
+
+            <div class="form-group">
+              <label for="city">Город:</label>
+              <input id="city" class="form-control" v-model.trim="form.city">
+            </div>
+
+            <div class="form-group">
+              <label for="street">Улица:</label>
+              <input id="street" class="form-control" v-model.trim="form.street">
+            </div>
+
+            <div class="form-group">
+              <label for="home">Дом:</label>
+              <input id="home" class="form-control" v-model.trim="form.home">
+            </div>
+
+      <button @click="step--" type="button" class="btn btn-light mr-2">Назад</button>
+      <button @click="step++" :disabled="disabledBtn2"
+              type="button" class="btn btn-primary">Следующий шаг</button>
+    </div>
+
+    <div v-show="step === 3">
+
+            <div class="form-group">
+              <label for="documentType">Тип документа:</label>
+              <select id="documentType" class="form-control" v-model="form.documentType">
+                <option v-for="(documentType, index) in documentTypes" :key="index" :value="documentType.value">
+                  {{ documentType.label }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="series">Серия:</label>
+              <input id="series" class="form-control" v-model.trim="form.series">
+            </div>
+
+            <div class="form-group">
+              <label for="number">Номер:</label>
+              <input id="number" class="form-control" v-model.trim="form.number">
+            </div>
+
+            <div class="form-group">
+              <label for="issuedBy">Кем выдан:</label>
+              <input id="issuedBy" class="form-control" v-model.trim="form.issuedBy">
+            </div>
+
+            <div class="form-group">
+              <label for="dateOfIssue">Дата выдачи:</label>
+              <input id="dateOfIssue" class="form-control" v-model.trim="form.dateOfIssue">
+            </div>
+
+      <button @click="step--" type="button" class="btn btn-light mr-2">Назад</button>
+      <button :disabled="disabledBtnFinish"
+              type="submit" class="btn btn-primary">Зарегистрироваться</button>
+
+    </div>
 
    </div>
    </div>
@@ -142,18 +161,18 @@
     mixins: [validationMixin],
         data () {
           return {
+            step: 1,
             form:{
               surname: '',
               name: '',
               middleName: '',
               dateOfBirth: '',
-              phoneNumber: '', /*(11 цифр. Начинается с 7)*/
+              phoneNumber: '',
               sex: '',
-              doNotSendSMS: false, /*(Чекбокс)*/
+              doNotSendSMS: false,
               selectedClientGroups: ['VIP'],
               attendingDoctor: 'Ivanov',
 
-              /*adres*/
               index: '',
               country: '',
               region: '',
@@ -161,7 +180,6 @@
               street: '',
               home: '',
 
-              /*pasport*/
               documentType: 'Passport',
 
               series: '',
